@@ -7,7 +7,7 @@ import connect from './db/connect';
 import routes from './routes';
 import { deserializeUser } from './middleware';
 
-const port = config.get<number>('port') || 8080;
+const port = config.get<number>('port');
 const host = config.get<string>('host');
 
 const app = express();
