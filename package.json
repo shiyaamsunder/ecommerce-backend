@@ -9,8 +9,9 @@
   "scripts": {
     "dev": "nodemon --config nodemon.json src/app.ts ",
     "start": "node build/src/app.js",
-    "build": "rimraf build && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "npm run build"
   },
   "keywords": [],
   "author": "",
