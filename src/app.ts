@@ -1,22 +1,22 @@
-import express from "express";
-import config from "config";
-import log from "./lib/logger";
-import morgan from "morgan";
-import cors from "cors";
-import connect from "./db/connect";
-import routes from "./routes";
-import { deserializeUser } from "./middleware";
+import express from 'express';
+import config from 'config';
+import log from './lib/logger';
+import morgan from 'morgan';
+import cors from 'cors';
+import connect from './db/connect';
+import routes from './routes';
+import { deserializeUser } from './middleware';
 
-const port = config.get<number>("port");
-const host = config.get<string>("host");
+const port = config.get<number>('port') || 8080;
+const host = config.get<string>('host');
 
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: 'http://localhost:3000'
   })
 );
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(deserializeUser);
 
 app.use(express.json());
