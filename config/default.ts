@@ -7,5 +7,5 @@ export default {
   saltworkfactor: parseInt(process.env.SALT_WORK_FACTOR!),
   accessTokenTtl: process.env.ACCESS_TOKEN_TTL,
   refreshTokenTtl: process.env.REFRESH_TOKEN_TTL,
-  privateKey: process.env.PRIVATE_KEY,
+  privateKey: process.env.PRIVATE_KEY
 };
