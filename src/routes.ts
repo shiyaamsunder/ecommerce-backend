@@ -2,22 +2,23 @@ import { Express, Response, Request, NextFunction } from 'express';
 import { NotFound } from 'http-errors';
 import {
   getCartItemsHandler,
-  updateCartHandler,
+  updateCartHandler
 } from './controller/cart-item.controller';
 import {
   getAllProductsHandler,
   getSingleProductHandler,
   getAllProductCategoriesHandler,
+  getProductsFromCategory
 } from './controller/product.controller';
 import {
   createUserHandler,
-  loginUserHandler,
+  loginUserHandler
 } from './controller/user.controller';
 import { requiresUser } from './middleware';
 import validate from './middleware/validateRequest';
 import {
   createUserSchema,
-  createUserSessionSchema,
+  createUserSessionSchema
 } from './schema/user.schema';
 
 export default function (app: Express) {
@@ -28,6 +29,9 @@ export default function (app: Express) {
 
   // Get all product categories
   app.get('/api/products/categories', getAllProductCategoriesHandler);
+
+  // Get all products from a single category
+  app.get('/api/products/categories/:category', getProductsFromCategory);
 
   // Get Single Product
   app.get('/api/products/:productId', getSingleProductHandler);
@@ -62,8 +66,8 @@ export default function (app: Express) {
     res.send({
       error: {
         status: err.status || 500,
-        message: err.message,
-      },
+        message: err.message
+      }
     });
   });
 }

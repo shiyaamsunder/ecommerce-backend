@@ -1,9 +1,15 @@
-import { DocumentDefinition, FilterQuery, QueryOptions } from 'mongoose';
+import { FilterQuery, QueryOptions } from 'mongoose';
 
 import Product, { ProductDocument } from '../model/product.model';
 
 export const findAllProducts = () => {
   return Product.find();
+};
+
+export const findAllProductsByQuery = async (
+  query: FilterQuery<ProductDocument>
+) => {
+  return Product.find(query);
 };
 
 export const findOneProduct = (
@@ -19,9 +25,9 @@ export const findAllProductsCategories = async () => {
       $group: {
         _id: '$category',
         category: { $first: '$category' },
-        image: { $first: '$image' },
-      },
-    },
+        image: { $first: '$image' }
+      }
+    }
   ]);
   return categories;
 };
