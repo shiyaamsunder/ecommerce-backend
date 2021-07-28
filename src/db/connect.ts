@@ -8,6 +8,7 @@ const connect = () => {
     .connect(dbUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false
     })
     .then(() => {
       log.info(`Database connected 🚀`);

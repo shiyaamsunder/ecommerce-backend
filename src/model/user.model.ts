@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import config from 'config';
 import { ProductDocument } from './product.model';
-import { createCart } from '../service/cart-item.service';
 
 export interface UserDocument extends mongoose.Document {
   email: string;
@@ -10,7 +9,6 @@ export interface UserDocument extends mongoose.Document {
   name: string;
   createdAt: Date;
   updatedAt: Date;
-  cart: ProductDocument['_id'][];
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -18,8 +16,7 @@ const UserSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true, unique: true },
-    password: { type: String, require: true },
-    cart: [{ type: mongoose.Types.ObjectId, ref: 'product' }],
+    password: { type: String, require: true }
   },
   { timestamps: true }
 );

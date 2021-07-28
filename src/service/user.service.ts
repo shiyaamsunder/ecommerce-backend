@@ -4,10 +4,14 @@ import User, { UserDocument } from '../model/user.model';
 import { FilterQuery } from 'mongodb';
 import { decode, sign } from '../utils/jwt.utils';
 import config from 'config';
+import CartItem from '../model/cart-item.model';
+import { InternalServerError } from 'http-errors';
 
 export const createUser = async (input: DocumentDefinition<UserDocument>) => {
   try {
-    return await User.create(input);
+    const user = await User.create(input);
+    await CartItem.create({ items: [], user: user._id });
+    return user;
   } catch (err) {
     throw new Error(err);
   }
@@ -15,7 +19,7 @@ export const createUser = async (input: DocumentDefinition<UserDocument>) => {
 
 export const validatePassword = async ({
   email,
-  password,
+  password
 }: {
   email: UserDocument['email'];
   password: string;
@@ -53,7 +57,7 @@ export const reIssueAccessToken = async (token: string) => {
   const accessToken = sign(
     { id: user._id },
     {
-      expiresIn: config.get('accessTokenTtl'),
+      expiresIn: config.get('accessTokenTtl')
     }
   );
 

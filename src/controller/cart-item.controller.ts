@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerError } from 'http-errors';
-import { get } from 'lodash';
+import { get, omit, pick } from 'lodash';
 import { findAndUpdate, getCartItems } from '../service/cart-item.service';
-import { findUser } from '../service/user.service';
 
 export const getCartItemsHandler = async (
   req: Request,
@@ -11,12 +10,13 @@ export const getCartItemsHandler = async (
 ) => {
   try {
     const user = get(req, 'user');
+    const cartWithUserId = await getCartItems({ user: user.id });
+    const nestedCartedData = omit(cartWithUserId, 'user');
 
-    const userData = await getCartItems({ _id: user.id });
-    const cart = get(userData, 'cart');
-
-    return res.send({ cart });
+    // const cart = nestedCartedData.items.map((item) => flatten(item));
+    return res.send(nestedCartedData);
   } catch (error) {
+    console.log(error);
     return next(new InternalServerError());
   }
 };
@@ -29,13 +29,13 @@ export const updateCartHandler = async (
   try {
     const user = get(req, 'user');
     const cart = get(req.body, 'cart');
-    const updateduser = await findAndUpdate(
-      { _id: user.id },
-      { cart: cart },
-      {}
-    );
+    const updatedCart = await findAndUpdate({ user: user.id }, { items: cart });
 
-    res.send({ message: 'Cart updated' });
+    if (updatedCart) {
+      res.send({ message: 'Cart updated', cart: updatedCart });
+    } else {
+      return next();
+    }
   } catch (error) {
     console.log(error);
     return next(new InternalServerError());
