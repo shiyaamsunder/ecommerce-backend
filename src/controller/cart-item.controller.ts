@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { InternalServerError } from 'http-errors';
 import { get, omit, pick } from 'lodash';
+import { flatten } from '../helpers';
 import { findAndUpdate, getCartItems } from '../service/cart-item.service';
 
 export const getCartItemsHandler = async (
@@ -10,11 +11,21 @@ export const getCartItemsHandler = async (
 ) => {
   try {
     const user = get(req, 'user');
-    const cartWithUserId = await getCartItems({ user: user.id });
+    const cartWithUserId = await getCartItems(
+      { user: user.id },
+      { lean: true }
+    );
     const nestedCartedData = omit(cartWithUserId, 'user');
 
     // const cart = nestedCartedData.items.map((item) => flatten(item));
-    return res.send(nestedCartedData);
+
+    const cart = nestedCartedData.items.map((item) => {
+      return {
+        amount: item.amount,
+        ...item.product._doc
+      };
+    });
+    return res.send(cart);
   } catch (error) {
     console.log(error);
     return next(new InternalServerError());

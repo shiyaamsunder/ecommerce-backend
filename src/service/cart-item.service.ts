@@ -8,15 +8,14 @@ import CartItem, { CartItemDocument } from '../model/cart-item.model';
 
 export const getCartItems = async (
   query: FilterQuery<CartItemDocument>,
-  options: QueryOptions = { lean: true }
+  options: QueryOptions
 ) => {
-  return CartItem.findOne(query, {}, options)
-    .lean()
+  return CartItem.findOne(query, options)
     .populate({
       path: 'items',
-      populate: 'product',
-      options: { lean: true }
-    });
+      populate: 'product'
+    })
+    .lean();
 };
 
 export function findAndUpdate(
