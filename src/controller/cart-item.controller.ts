@@ -18,7 +18,6 @@ export const getCartItemsHandler = async (
     const nestedCartedData = omit(cartWithUserId, 'user');
 
     // const cart = nestedCartedData.items.map((item) => flatten(item));
-
     const cart = nestedCartedData.items.map((item) => {
       return {
         amount: item.amount,
@@ -40,6 +39,7 @@ export const updateCartHandler = async (
   try {
     const user = get(req, 'user');
     const cart = get(req.body, 'cart');
+    console.log(req.body);
     const updatedCart = await findAndUpdate({ user: user.id }, { items: cart });
 
     if (updatedCart) {
