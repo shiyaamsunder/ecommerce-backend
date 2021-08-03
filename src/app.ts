@@ -13,7 +13,11 @@ const host = config.get<string>('host');
 const app = express();
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://ecommerce-frontend-sigma.vercel.app']
+    origin: [
+      'http://localhost:3000',
+      'https://ecommerce-frontend-sigma.vercel.app',
+      'https://ecommerce-frontend-shiyaamsunder.vercel.app'
+    ]
   })
 );
 app.use(morgan('dev'));
